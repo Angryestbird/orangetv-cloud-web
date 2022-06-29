@@ -1,0 +1,9 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  orangetv-cloud-web:
+    ports:
+      - "8080:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
+    image: nginx
