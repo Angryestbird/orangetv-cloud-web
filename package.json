@@ -10,8 +10,10 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "vue": "^3.2.36",
+    "vue-router": "^4.0.16",
     "element-plus": "^2.2.2",
-    "vue": "^3.2.36"
+    "pinia": "^2.0.14"
   },
   "devDependencies": {
     "@iconify-json/ep": "^1.1.4",
