@@ -32,4 +32,4 @@ npm run build
 用户配置个人信息的页面
 
 ## 关于
-(nightCat)[https://github.com/angryestbird]
+我的GitHub主页 [nightCat](https://github.com/angryestbird)
