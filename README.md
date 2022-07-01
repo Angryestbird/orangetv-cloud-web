@@ -22,3 +22,14 @@ npm run build
 ### 个性化主题
 
 修改 `src/styles/element/index.scss`.
+
+## 模块
+### 播放
+允许用户选择视频并播放
+### 统计
+统计视频播放量并用图表展示
+### 设置
+用户配置个人信息的页面
+
+## 关于
+(nightCat)[https://github.com/angryestbird]

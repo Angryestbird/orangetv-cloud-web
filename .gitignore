@@ -37,4 +37,4 @@ out/
 local.properties
 
 # other
-/src/components.d.ts
+# /src/components.d.ts
