@@ -18,6 +18,12 @@
       </el-icon>
       <template #title>设置</template>
     </el-menu-item>
+    <el-menu-item index="/user">
+      <el-icon>
+        <User />
+      </el-icon>
+      <template #title>用户</template>
+    </el-menu-item>
     <el-menu-item index="/about">
       <el-icon>
         <Warning />
@@ -33,5 +39,6 @@ import {
   DataLine,
   Warning,
   Setting,
+  User
 } from '@element-plus/icons-vue'
 </script>

@@ -27,12 +27,10 @@ const handleSelect = (item: SearchItem) => {
     @select="handleMenuSelect">
     <el-menu-item index="1">🍊 橘子云TV</el-menu-item>
     <div class="flex-grow"></div>
-    <el-menu-item index="2">
-      <el-autocomplete class="w-50 m-2" size="large" placeholder="搜索资源" :suffix-icon="Search" v-model="searchText"
-        :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable />
-    </el-menu-item>
+    <el-autocomplete class="w-50 m-2" size="large" placeholder="搜索资源" :suffix-icon="Search" v-model="searchText"
+      :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable />
     <div class="flex-grow"></div>
-    <el-menu-item index="3" h="full" @click="toggleDark()">
+    <el-menu-item index="2" h="full" @click="toggleDark()">
       <button class="border-none w-full bg-transparent cursor-pointer" style="height: var(--ep-menu-item-height);">
         <i inline-flex i="dark:ep-moon ep-sunny" />
       </button>

@@ -8,10 +8,21 @@ const router = createRouter({
       redirect: '/video',
     },
     {
-      path: '/',
-      alias: '/video',
+      path: '/video',
       name: 'home',
-      component: () => import('~/components/views/Videos.vue')
+      component: () => import('~/components/views/Video.vue'),
+      children: [
+        {
+          path: 'list',
+          name: 'videoList',
+          component: () => import('~/components/views/video/List.vue')
+        },
+        {
+          path: 'play',
+          name: 'videoPlay',
+          component: () => import('~/components/views/video/play.vue')
+        }
+      ]
     },
     {
       path: '/statics',
@@ -24,9 +35,14 @@ const router = createRouter({
       component: () => import('~/components/views/Setting.vue')
     },
     {
+      path: '/user',
+      name: 'user',
+      component: () => import('~/components/views/User.vue')
+    },
+    {
       path: '/about',
       name: 'about',
-      component: () => import('~/components/views/about.vue')
+      component: () => import('~/components/views/About.vue')
     }
   ]
 })
