@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ArrowLeft } from '@element-plus/icons-vue'
 import { VideoPlay } from '@element-plus/icons-vue';
 const props = defineProps<{
   searchText?: number
@@ -46,6 +45,7 @@ var src = ref("https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-1
       </el-card>
     </el-col>
   </el-row>
+  <el-pagination layout="prev, pager, next" :total="50" />
 </template>
 
 <style scoped>
