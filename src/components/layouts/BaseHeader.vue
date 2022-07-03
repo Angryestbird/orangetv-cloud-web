@@ -2,6 +2,7 @@
 import { Search } from '@element-plus/icons-vue';
 import { ref } from 'vue';
 import { toggleDark } from '~/composables';
+import { useRouter, useRoute } from 'vue-router'
 
 interface SearchItem {
   value: any
@@ -17,9 +18,17 @@ const querySearch = (queryString: string, cb: any) => {
   // call callback function to return suggestions
   cb(results)
 }
+
+const router = useRouter()
 const handleSelect = (item: SearchItem) => {
-  console.log(item)
+  searchText = item.value
 }
+const submit = (e: KeyboardEvent) => router.push({
+  name: 'videoList',
+  query: {
+    search: searchText.value
+  }
+})
 </script>
 
 <template>
@@ -28,7 +37,8 @@ const handleSelect = (item: SearchItem) => {
     <el-menu-item index="1">🍊 橘子云TV</el-menu-item>
     <div class="flex-grow"></div>
     <el-autocomplete class="w-50 m-2" size="large" placeholder="搜索资源" :suffix-icon="Search" v-model="searchText"
-      :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable />
+      :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable
+      @keyup.enter="submit" />
     <div class="flex-grow"></div>
     <el-menu-item index="2" h="full" @click="toggleDark()">
       <button class="border-none w-full bg-transparent cursor-pointer" style="height: var(--ep-menu-item-height);">

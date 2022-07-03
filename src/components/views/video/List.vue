@@ -60,7 +60,8 @@ var src = ref("https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-1
 
 /* 调整卡片行间距 */
 .ep-card {
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .bottom {
