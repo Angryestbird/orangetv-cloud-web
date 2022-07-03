@@ -5,7 +5,9 @@ import { RouterView } from 'vue-router'
   <el-config-provider namespace="ep">
     <BaseHeader />
     <el-container>
-      <BaseSide />
+      <el-aside width="64px">
+        <BaseSide />
+      </el-aside>
       <el-main>
         <RouterView></RouterView>
       </el-main>
