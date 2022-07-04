@@ -5,40 +5,43 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/video',
+      redirect: '/video/list',
+    },
+
+    // 影视
+    {
+      path: '/video/list',
+      name: 'videoList',
+      component: () => import('~/components/views/video/List.vue')
     },
     {
-      path: '/video',
-      name: 'home',
-      component: () => import('~/components/views/Video.vue'),
-      children: [
-        {
-          path: 'list',
-          name: 'videoList',
-          component: () => import('~/components/views/video/List.vue')
-        },
-        {
-          path: 'play',
-          name: 'videoPlay',
-          component: () => import('~/components/views/video/play.vue')
-        }
-      ]
+      path: '/video/play',
+      name: 'videoPlay',
+      component: () => import('~/components/views/video/play.vue')
     },
+
+    // 统计
     {
       path: '/statics',
       name: 'statics',
       component: () => import('~/components/views/Statics.vue')
     },
+
+    // 设置
     {
       path: '/setting',
       name: 'setting',
       component: () => import('~/components/views/Setting.vue')
     },
+
+    // 用户
     {
       path: '/user',
       name: 'user',
       component: () => import('~/components/views/User.vue')
     },
+
+    // 关于
     {
       path: '/about',
       name: 'about',

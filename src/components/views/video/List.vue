@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { VideoPlay } from '@element-plus/icons-vue';
+import { Film } from '@element-plus/icons-vue'
 import { computed } from '@vue/reactivity';
 const props = defineProps<{
   searchText?: number
@@ -24,32 +25,33 @@ const lineNum = computed(() => Math.ceil(totalInPage.value / cntPerRow.value))
 </script>
 
 <template>
-  <el-row v-for="rowNum in lineNum">
-    <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
-      <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :span="10" :sm="4"
-        :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
-        <el-card :body-style="{ padding: '0px' }" shadow="hover">
-          <el-image :src="src" class="image" fit="scale-down" />
-          <div style="display: flex;justify-content: space-between;">
-            <div style="padding: 5px">
-              <span class="title">Yummy hamburger {{ list[(rowNum - 1) * cntPerRow + index] }}</span>
-              <div class="bottom">
-                <time class="time">{{ currentDate }}</time>
+  <div>
+    <el-page-header :icon="Film" content="影视" title=" " />
+    <el-row v-for="rowNum in lineNum">
+      <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
+        <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :span="10" :sm="4"
+          :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover">
+            <el-image :src="src" class="image" fit="scale-down" />
+            <div style="display: flex;justify-content: space-between;">
+              <div style="padding: 5px">
+                <span class="title">Yummy hamburger {{ list[(rowNum - 1) * cntPerRow + index] }}</span>
+                <div class="bottom">
+                  <time class="time">{{ currentDate }}</time>
+                </div>
+              </div>
+              <div style="margin: 3px;">
+                <el-button class="button" type="warning" :icon="VideoPlay" circle />
               </div>
             </div>
-            <div style="margin: 3px;">
-              <el-button class="button" type="warning" :icon="VideoPlay" circle />
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </template>
-
-  </el-row>
-  <div style="display: flex;justify-content: center;">
-    <el-pagination layout="prev, pager, next" :total="50" />
+          </el-card>
+        </el-col>
+      </template>
+    </el-row>
+    <div style="display: flex;justify-content: center;">
+      <el-pagination layout="prev, pager, next" :total="50" />
+    </div>
   </div>
-  <!-- <a>clientWidth:{{ clientWidth }}}</a> -->
 </template>
 
 <style scoped>

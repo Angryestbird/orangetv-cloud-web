@@ -1,10 +1,10 @@
 <template>
   <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="true" :router="true">
-    <el-menu-item index="/video">
+    <el-menu-item index="/video/list">
       <el-icon>
-        <VideoPlay />
+        <Film />
       </el-icon>
-      <template #title>播放</template>
+      <template #title>影视</template>
     </el-menu-item>
     <el-menu-item index="/statics">
       <el-icon>
@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import {
-  VideoPlay,
+  Film,
   DataLine,
   Warning,
   Setting,
