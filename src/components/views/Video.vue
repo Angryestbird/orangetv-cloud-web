@@ -29,9 +29,3 @@ const back = (e: undefined) => router.push(videoListRoute)
   <el-page-header :icon="ArrowLeft" :content="content" title="返回" @back="back" />
   <RouterView></RouterView>
 </template>
-
-<style scoped>
-.ep-page-header__left {
-  display: none;
-}
-</style>
