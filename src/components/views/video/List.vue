@@ -1,25 +1,36 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
 import { useVideoStore } from '~/stores/videoStore';
 import { VideoPlay } from '@element-plus/icons-vue';
 import { Film } from '@element-plus/icons-vue'
 import { computed } from '@vue/reactivity';
 import { storeToRefs } from 'pinia';
+
+// 定义搜索文本为入参
 const props = defineProps<{
   searchText?: number
 }>()
 
+// 初始化设备相关参数
 const clientWidth = ref(document.body.clientWidth);
+const isMobile = computed(() => clientWidth.value < 768)
+const cntPerRow = computed(() => isMobile.value ? 2 : 5)
 onMounted(() => {
   window.onresize = () => clientWidth.value = document.body.clientWidth
 })
 
-const isMobile = computed(() => clientWidth.value < 768)
-const cntPerRow = computed(() => isMobile.value ? 2 : 5)
-
+// 初始化store
 const videoStore = useVideoStore()
 const { dataList, totalInPage, lineNum } = storeToRefs(videoStore)
 onMounted(() => videoStore.fetch())
+
+// 播放回调
+const router = useRouter()
+const playVideo = (id: number) => router.push({
+  name: 'videoPlay',
+  params: { id }
+})
 </script>
 
 <template>
@@ -41,7 +52,8 @@ onMounted(() => videoStore.fetch())
                 </div>
               </div>
               <div style="margin: 3px;">
-                <el-button class="button" type="warning" :icon="VideoPlay" circle />
+                <el-button class="button" type="warning" :icon="VideoPlay" circle
+                  @click="() => playVideo(dataList[(rowNum - 1) * cntPerRow + index].id)" />
               </div>
             </div>
           </el-card>
