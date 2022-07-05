@@ -31,7 +31,6 @@ declare module '@vue/runtime-core' {
     Statics: typeof import('./components/views/Statics.vue')['default']
     User: typeof import('./components/views/User.vue')['default']
     UserInfo: typeof import('./components/views/UserInfo.vue')['default']
-    Video: typeof import('./components/views/Video.vue')['default']
   }
 }
 

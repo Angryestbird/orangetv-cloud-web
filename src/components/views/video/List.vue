@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useVideoStore } from '~/stores/videoStore';
 import { VideoPlay } from '@element-plus/icons-vue';
 import { Film } from '@element-plus/icons-vue'
 import { computed } from '@vue/reactivity';
+import { storeToRefs } from 'pinia';
 const props = defineProps<{
   searchText?: number
 }>()
@@ -12,32 +14,30 @@ onMounted(() => {
   window.onresize = () => clientWidth.value = document.body.clientWidth
 })
 
-const currentDate = ref(new Date().toLocaleString())
-const src = ref("https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png")
-
 const isMobile = computed(() => clientWidth.value < 768)
 const cntPerRow = computed(() => isMobile.value ? 2 : 5)
 
-const list = ref(['a', 'b', 'c', 'd', 'e', 'f'])
-const totalInPage = ref(list.value.length);
-const lineNum = computed(() => Math.ceil(totalInPage.value / cntPerRow.value))
-
+const videoStore = useVideoStore()
+const { dataList, totalInPage, lineNum } = storeToRefs(videoStore)
+onMounted(() => videoStore.fetch())
 </script>
 
 <template>
   <div>
     <el-page-header :icon="Film" content="影视" title=" " />
-    <el-row v-for="rowNum in lineNum">
+    <el-row v-for="rowNum in lineNum(cntPerRow)">
       <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
         <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :span="10" :sm="4"
           :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
           <el-card :body-style="{ padding: '0px' }" shadow="hover">
-            <el-image :src="src" class="image" fit="scale-down" />
+            <el-image :src="dataList[(rowNum - 1) * cntPerRow + index].coverUrl" class="image" fit="scale-down" />
             <div style="display: flex;justify-content: space-between;">
               <div style="padding: 5px">
-                <span class="title">Yummy hamburger {{ list[(rowNum - 1) * cntPerRow + index] }}</span>
+                <span class="title">{{ dataList[(rowNum - 1) * cntPerRow + index].title }}</span>
                 <div class="bottom">
-                  <time class="time">{{ currentDate }}</time>
+                  <time class="time">{{ dataList[(rowNum - 1) * cntPerRow + index]
+                      .uploadTime.toLocaleTimeString()
+                  }}</time>
                 </div>
               </div>
               <div style="margin: 3px;">

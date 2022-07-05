@@ -9,17 +9,22 @@ import App from "./App.vue";
 
 // or use cdn, uncomment cdn link in `index.html`
 
-import "~/styles/index.scss";
+import { createPinia } from 'pinia'
 import 'uno.css'
-import router from "./router";
+import "~/styles/index.scss"
+import router from "./router"
 
 // If you want to use ElMessage, import it.
 import "element-plus/theme-chalk/src/message.scss"
 
-const app = createApp(App);
+const app = createApp(App)
+const pinia = createPinia()
 
 // integrate vue-router
-app.use(router);
+app.use(router)
+
+// integrate pinia
+app.use(pinia)
 
 // app.use(ElementPlus);
-app.mount("#app");
+app.mount("#app")
