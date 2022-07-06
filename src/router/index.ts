@@ -17,6 +17,7 @@ const router = createRouter({
     {
       path: '/video/play/:id',
       name: 'videoPlay',
+      props: true,
       component: () => import('~/components/views/video/play.vue')
     },
 

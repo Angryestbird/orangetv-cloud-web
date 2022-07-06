@@ -1,41 +1,25 @@
 <script setup lang="ts">
-import { ArrowLeft } from '@element-plus/icons-vue'
-import { useRoute, useRouter } from 'vue-router';
-import { videpPlay } from 'vue3-video-play'
-
+import { ArrowLeft } from '@element-plus/icons-vue';
 import { reactive } from "vue";
-const options = reactive({
-  width: "800px",
-  height: "450px",
-  color: "#409eff",
-  muted: false, //静音
-  webFullScreen: false,
-  autoPlay: false, //自动播放
-  currentTime: 0,
-  loop: false, //循环播放
-  mirror: false, //镜像画面
-  ligthOff: false, //关灯模式
-  volume: 0.3, //默认音量大小
-  control: true, //是否显示控制器
-  title: "", //视频名称
-  type: "m3u8",
-  src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", //视频源
-  // src: "https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/IronMan.mp4", //视频源
-  // src: "https://logos-channel.scaleengine.net/logos-channel/live/biblescreen-ad-free/playlist.m3u8", //视频源
-  poster: "https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/ironMan.jpg", //封面
-  controlBtns: [
-    "audioTrack",
-    "quality",
-    "speedRate",
-    "volume",
-    "setting",
-    "pip",
-    "pageFullScreen",
-    "fullScreen",
-  ],
-});
+import { useRoute, useRouter } from 'vue-router';
+import { videoPlay } from 'vue3-video-play';
+import 'vue3-video-play/dist/style.css';
+import { useVideoStore, Video } from '~/stores/videoStore';
+import Option from '~/util/option';
 
+// 初始化播放信息
+const videoStore = useVideoStore()
+const props = defineProps<{ id: number }>()
+var video: Video = videoStore.getById(props.id)
+const options = reactive(new Option());
+if (video != undefined) {
+  options.title = video.title
+  options.poster = video.coverUrl
+  options.type = video.type || options.type
+  options.src = video.url
+}
 
+// 初始化返回按钮
 const router = useRouter()
 const route = useRoute()
 const goBack = () => {
@@ -49,6 +33,8 @@ const goBack = () => {
 </script>
 
 <template>
-  <el-page-header :icon="ArrowLeft" title="返回" content="videoName" @back="goBack" />
-  <vue3-video-play v-bind="options" poster="https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/ironMan.jpg" />
+  <div>
+    <el-page-header :icon="ArrowLeft" title="返回" content="videoName" @back="goBack" />
+    <video-play ref="video" style="display: inline-block; width: 100%" v-bind="options" />
+  </div>
 </template>

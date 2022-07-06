@@ -61,7 +61,7 @@ const playVideo = (id: number) => router.push({
       </template>
     </el-row>
     <div style="display: flex;justify-content: center;">
-      <el-pagination layout="prev, pager, next" :total="50" />
+      <el-pagination layout="prev, pager, next" :total="videoStore.totalCnt" />
     </div>
   </div>
 </template>
