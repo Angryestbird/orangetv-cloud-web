@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { DataAnalysis } from '@element-plus/icons-vue';
 import {
-BarChart,
-// 系列类型的定义后缀都为 SeriesOption
-BarSeriesOption,
-LineChart,
-LineSeriesOption
+    BarChart,
+    // 系列类型的定义后缀都为 SeriesOption
+    BarSeriesOption,
+    LineChart,
+    LineSeriesOption
 } from 'echarts/charts';
 import {
-// 数据集组件
-DatasetComponent,
-DatasetComponentOption, GridComponent,
-GridComponentOption, TitleComponent,
-// 组件类型的定义后缀都为 ComponentOption
-TitleComponentOption,
-TooltipComponent,
-TooltipComponentOption,
-// 内置数据转换器组件 (filter, sort)
-TransformComponent
+    // 数据集组件
+    DatasetComponent,
+    DatasetComponentOption, GridComponent,
+    GridComponentOption, TitleComponent,
+    // 组件类型的定义后缀都为 ComponentOption
+    TitleComponentOption,
+    TooltipComponent,
+    TooltipComponentOption,
+    // 内置数据转换器组件 (filter, sort)
+    TransformComponent
 } from 'echarts/components';
 import * as echarts from 'echarts/core';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
@@ -99,6 +99,7 @@ const { playbackRank } = storeToRefs(staticsStore)
 var unwatch: WatchStopHandle
 onMounted(() => {
     var mychart = echarts.init(chart.value)
+    window.onresize = () => mychart.resize()
 
     unwatch = watch(playbackRank, (newPlaybackRank => {
         (<any[]>(option.dataset))[0].source = newPlaybackRank
@@ -112,8 +113,10 @@ staticsStore.fetch()
 <template>
     <div>
         <el-page-header :icon="DataAnalysis" content="统计" title=" " />
-        <div style="display: flex;justify-content:center;">
-            <div style="width: 600px;height: 480px;" ref="chart"></div>
-        </div>
+        <el-card style="margin: 10px;">
+            <div style="display: flex;justify-content:center;">
+                <div style="width: 600px;height: 480px;" ref="chart"></div>
+            </div>
+        </el-card>
     </div>
 </template>
