@@ -2,13 +2,13 @@
   <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="true" :router="true">
     <el-menu-item index="/video/list">
       <el-icon>
-        <Film />
+        <film />
       </el-icon>
       <template #title>影视</template>
     </el-menu-item>
     <el-menu-item index="/statics">
       <el-icon>
-        <DataLine />
+        <data-analysis />
       </el-icon>
       <template #title>统计</template>
     </el-menu-item>
@@ -20,13 +20,13 @@
     </el-menu-item>
     <el-menu-item index="/user">
       <el-icon>
-        <User />
+        <user />
       </el-icon>
       <template #title>用户</template>
     </el-menu-item>
     <el-menu-item index="/about">
       <el-icon>
-        <Warning />
+        <warning />
       </el-icon>
       <template #title>关于</template>
     </el-menu-item>
@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import {
   Film,
-  DataLine,
+  DataAnalysis,
   Warning,
   Setting,
   User
