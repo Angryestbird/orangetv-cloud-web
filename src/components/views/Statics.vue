@@ -22,7 +22,9 @@ TransformComponent
 import * as echarts from 'echarts/core';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
+import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref, watch, WatchStopHandle } from 'vue';
+import { useStaticsStore } from '~/stores/staticsStore';
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = echarts.ComposeOption<
@@ -91,26 +93,20 @@ const option: ECOption = {
 };
 const chart = ref(<HTMLElement><unknown>null)
 
-const dataSource = ref(<any[]>[])
+const staticsStore = useStaticsStore()
+const { playbackRank } = storeToRefs(staticsStore)
 
 var unwatch: WatchStopHandle
 onMounted(() => {
     var mychart = echarts.init(chart.value)
 
-    unwatch = watch(dataSource, (newDataSource => {
-        (<any[]>(option.dataset))[0].source = newDataSource
-        mychart.setOption(option)
+    unwatch = watch(playbackRank, (newPlaybackRank => {
+        (<any[]>(option.dataset))[0].source = newPlaybackRank
+        newPlaybackRank && newPlaybackRank[0] && mychart.setOption(option)
     }))
 })
 onUnmounted(() => unwatch())
-
-setInterval(() => dataSource.value = [
-    { title: "变形金刚1", playbackAmount: 50 },
-    { title: "变形金刚2", playbackAmount: 40 },
-    { title: "变形金刚3", playbackAmount: 30 },
-    { title: "变形金刚4", playbackAmount: 20 },
-    { title: "变形金刚5", playbackAmount: 10 }
-], 3000)
+staticsStore.fetch()
 </script>
 
 <template>
@@ -119,6 +115,5 @@ setInterval(() => dataSource.value = [
         <div style="display: flex;justify-content:center;">
             <div style="width: 600px;height: 480px;" ref="chart"></div>
         </div>
-        <a>{{ dataSource }}}</a>
     </div>
 </template>
