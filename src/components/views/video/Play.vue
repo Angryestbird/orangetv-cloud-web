@@ -14,11 +14,18 @@ var video: Video = videoStore.getById(parseInt(props.id))
 
 // 响应屏幕宽度
 const clientWidth = ref(document.body.clientWidth);
+const clientHeight = ref(document.body.clientHeight);
 const playerWidth = computed(() => clientWidth.value - 120)
+const playerHeight = computed(() =>
+  Math.min(clientHeight.value - 30, Math.floor(clientWidth.value / 1.6)))
 const playerWidthPx = computed(() => playerWidth.value.toString() + 'px')
+const playerHeightPx = computed(() => playerHeight.value.toString() + 'px')
 
 onMounted(() => {
-  window.onresize = () => clientWidth.value = document.body.clientWidth
+  window.onresize = () => {
+    clientWidth.value = document.body.clientWidth
+    clientHeight.value = document.body.clientHeight
+  }
 })
 
 // 设置播放器属性
@@ -27,11 +34,10 @@ const options = computed(() => {
   if (video != undefined) {
     option.title = video.title
     option.poster = video.coverUrl
+    option.width = playerWidthPx.value
+    option.height = playerHeightPx.value
     option.type = video.type || option.type
     option.src = video.url
-
-    option.width = playerWidthPx.value
-    option.height = Math.floor(playerWidth.value * 0.625).toString() + 'px'
     return option
   }
 })
@@ -52,7 +58,6 @@ const goBack = () => {
 <template>
   <div>
     <el-page-header :icon="ArrowLeft" title="返回" :content="video.title" @back="goBack" />
-    <video-play ref="video" :style="{ display: 'inline-block', width: playerWidthPx }" v-bind="options" />
-    <!-- <a>{{ options }}}</a> -->
+    <video-play ref="video" style="{ display: 'inline-block': width: 100% }" v-bind="options" />
   </div>
 </template>

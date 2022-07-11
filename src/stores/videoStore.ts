@@ -23,7 +23,8 @@ export const useVideoStore = defineStore('videoStore', {
             totalCnt: 6,
             currentPage: 1,
             searchText: '',
-            dataList: <Video[]>[]
+            dataList: <Video[]>[],
+            videoInfo: <Video | null>null
         }
     },
     getters: {
@@ -32,6 +33,18 @@ export const useVideoStore = defineStore('videoStore', {
         getById() { return (id: number) => this.dataList.filter(video => video.id == id)[0] }
     },
     actions: {
+        async fetchById(id: number) {
+
+            var video = await this.getById(id) || {
+                id: 1,
+                title: 'video1',
+                type: 'm3u8',
+                uploadTime: new Date(),
+                coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            }
+            this.videoInfo = video;
+        },
         async fetch() {
             this.dataList = [
                 {
