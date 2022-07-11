@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ArrowLeft } from '@element-plus/icons-vue';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import { videoPlay } from 'vue3-video-play';
@@ -10,28 +11,25 @@ import Option from '~/util/option';
 // 初始化播放信息
 const videoStore = useVideoStore()
 const props = defineProps<{ id: string }>()
-var video: Video = videoStore.getById(parseInt(props.id))
+var { videoInfo } = storeToRefs(videoStore)
+videoStore.fetchById(parseInt(props.id))
 
 // 响应屏幕宽度
 const clientWidth = ref(document.body.clientWidth);
-const clientHeight = ref(document.body.clientHeight);
 const playerWidth = computed(() => clientWidth.value - 120)
-const playerHeight = computed(() =>
-  Math.min(clientHeight.value - 30, Math.floor(clientWidth.value / 1.6)))
+const playerHeight = computed(() => Math.floor(clientWidth.value / 1.8))
 const playerWidthPx = computed(() => playerWidth.value.toString() + 'px')
 const playerHeightPx = computed(() => playerHeight.value.toString() + 'px')
 
 onMounted(() => {
-  window.onresize = () => {
-    clientWidth.value = document.body.clientWidth
-    clientHeight.value = document.body.clientHeight
-  }
+  window.onresize = () => clientWidth.value = document.body.clientWidth
 })
 
 // 设置播放器属性
 const options = computed(() => {
   var option = new Option();
-  if (video != undefined) {
+  var video = videoInfo.value
+  if (video) {
     option.title = video.title
     option.poster = video.coverUrl
     option.width = playerWidthPx.value
@@ -57,7 +55,7 @@ const goBack = () => {
 
 <template>
   <div>
-    <el-page-header :icon="ArrowLeft" title="返回" :content="video.title" @back="goBack" />
+    <el-page-header :icon="ArrowLeft" title="返回" :content="videoInfo?.title" @back="goBack" />
     <video-play ref="video" style="{ display: 'inline-block': width: 100% }" v-bind="options" />
   </div>
 </template>

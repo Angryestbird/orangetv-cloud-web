@@ -24,7 +24,7 @@ export const useVideoStore = defineStore('videoStore', {
             currentPage: 1,
             searchText: '',
             dataList: <Video[]>[],
-            videoInfo: <Video | null>null
+            videoInfo: <Video | undefined>undefined
         }
     },
     getters: {
