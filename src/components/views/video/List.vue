@@ -40,7 +40,8 @@ const playVideo = (id: number) => router.push({
       <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
         <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :xs="10" :span="4"
           :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
-          <el-card :body-style="{ padding: '0px' }" shadow="hover">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover"
+            @click="() => playVideo(dataList[(rowNum - 1) * cntPerRow + index].id)">
             <el-image :src="dataList[(rowNum - 1) * cntPerRow + index].coverUrl" class="image" fit="scale-down" />
             <div style="display: flex;justify-content: space-between;">
               <div style="padding: 5px">
@@ -52,8 +53,7 @@ const playVideo = (id: number) => router.push({
                 </div>
               </div>
               <div style="margin: 3px;">
-                <el-button class="button" type="warning" :icon="VideoPlay" circle
-                  @click="() => playVideo(dataList[(rowNum - 1) * cntPerRow + index].id)" />
+                <el-button class="button" type="warning" :icon="VideoPlay" circle />
               </div>
             </div>
           </el-card>
