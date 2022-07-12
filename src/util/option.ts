@@ -1,4 +1,4 @@
-class Options {
+class PlayerOption {
     width = "800px"
     height = "450px"
     color = "orange"
@@ -53,4 +53,4 @@ class Options {
     ]
 }
 
-export default Options
+export default PlayerOption

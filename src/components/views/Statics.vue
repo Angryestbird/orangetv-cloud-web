@@ -113,7 +113,7 @@ staticsStore.fetch()
 <template>
     <div>
         <el-page-header :icon="DataAnalysis" content="统计" title=" " />
-        <el-card style="margin-top: 10px;">
+        <el-card style="margin-top: 12px;">
             <div style="display: flex;justify-content:center;">
                 <div style="width: 600px;height: 480px;" ref="chart"></div>
             </div>

@@ -13,7 +13,7 @@ var loginVO = reactive({
         <el-page-header :icon="User" content="用户" title=" " />
         <el-row :gutter="20">
             <el-col :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
-                <el-card style="margin-top: 30px;">
+                <el-card style="margin-top: 12px;">
                     <div style="display:flex;justify-content: center;">
                         <p style="font-size: large;">🍊 橘子云TV</p>
                     </div>

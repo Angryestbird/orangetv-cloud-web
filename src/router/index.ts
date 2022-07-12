@@ -18,7 +18,7 @@ const router = createRouter({
       path: '/video/play/:id',
       name: 'videoPlay',
       props: true,
-      component: () => import('~/components/views/video/play.vue')
+      component: () => import('~/components/views/video/Play.vue')
     },
 
     // 统计

@@ -36,7 +36,7 @@ const playVideo = (id: number) => router.push({
 <template>
   <div>
     <el-page-header :icon="Film" content="影视" title=" " />
-    <el-row v-for="rowNum in lineNum(cntPerRow)">
+    <el-row v-for="rowNum in lineNum(cntPerRow)" style="margin-top: 12px;">
       <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
         <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :xs="10" :span="4"
           :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
