@@ -7,7 +7,9 @@ import { Warning } from '@element-plus/icons-vue';
         <el-page-header :icon="Warning" content="关于" title=" " />
 
         <el-card style="margin-top: 12px;">
-            <h1>橘子云TV</h1>
+            <h1>
+                <img class="logo" fit="cover" src="/favicon.svg" /> <span>橘子云TV</span>
+            </h1>
             <p>
                 这是一个简单的项目，项目整合了Vue 3，Element+ UI，Pinia等较新且流行的前端框架。
                 同时，为了增加一点娱乐性，配合后端项目搭建的视频服务器，实现了播放本地视频的功能。
@@ -27,3 +29,10 @@ import { Warning } from '@element-plus/icons-vue';
         </el-card>
     </div>
 </template>
+
+<style scoped>
+.logo {
+    width: 36px;
+    height: 36px;
+}
+</style>

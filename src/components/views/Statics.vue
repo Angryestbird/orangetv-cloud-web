@@ -9,16 +9,16 @@ import {
 } from 'echarts/charts';
 import {
     // 数据集组件
-    DatasetComponent,
-    DatasetComponentOption, GridComponent,
-    GridComponentOption, TitleComponent,
     // 组件类型的定义后缀都为 ComponentOption
-    TitleComponentOption,
-    TooltipComponent,
-    TooltipComponentOption,
+    DatasetComponent, DatasetComponentOption,
+    GridComponent, GridComponentOption,
+    TitleComponent, TitleComponentOption,
+    TooltipComponent, TooltipComponentOption,
+    LegendComponent, LegendComponentOption,
     // 内置数据转换器组件 (filter, sort)
     TransformComponent
 } from 'echarts/components';
+import { } from 'echarts/components';
 import * as echarts from 'echarts/core';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -34,6 +34,7 @@ type ECOption = echarts.ComposeOption<
     | TooltipComponentOption
     | GridComponentOption
     | DatasetComponentOption
+    | LegendComponentOption
 >;
 
 // 注册必须的组件
@@ -47,6 +48,7 @@ echarts.use([
     LineChart,
     LabelLayout,
     UniversalTransition,
+    LegendComponent,
     CanvasRenderer
 ]);
 
@@ -87,6 +89,9 @@ const option: ECOption = {
                 x: 'playbackAmount',
                 // 将 "title" 列映射到 Y 轴。
                 y: 'title'
+            },
+            itemStyle: {
+                color: 'orange'
             }
         }
     ]

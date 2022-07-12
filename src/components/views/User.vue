@@ -14,8 +14,8 @@ var loginVO = reactive({
         <el-row :gutter="20">
             <el-col :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
                 <el-card style="margin-top: 12px;">
-                    <div style="display:flex;justify-content: center;">
-                        <p style="font-size: large;">🍊 橘子云TV</p>
+                    <div style="display:flex;justify-content: center;align-items:center;">
+                        <img class="logo" src="/favicon.svg" /><span style="font-size: large;">橘子云TV</span>
                     </div>
                     <div style="display:flex;justify-content: center;">
                         <el-form :model="loginVO" label-width="60px" style="max-width: 350px;">
@@ -35,3 +35,10 @@ var loginVO = reactive({
         </el-row>
     </div>
 </template>
+
+<style>
+.logo {
+    width: 36px;
+    height: 36px;
+}
+</style>

@@ -34,7 +34,8 @@ const submit = (e: KeyboardEvent) => router.push({
 <template>
   <el-menu class="el-menu-demo" mode="horizontal" :ellipsis="false" :default-active="activeIndex"
     @select="handleMenuSelect">
-    <el-menu-item index="1">🍊 橘子云TV</el-menu-item>
+    <el-menu-item index="1"><img class="logo" src="/favicon.svg" /><span style="font-size:large;">橘子云TV</span>
+    </el-menu-item>
     <div class="flex-grow"></div>
     <el-autocomplete class="w-50 m-2" size="large" placeholder="搜索资源" :suffix-icon="Search" v-model="searchText"
       :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable
@@ -47,3 +48,10 @@ const submit = (e: KeyboardEvent) => router.push({
     </el-menu-item>
   </el-menu>
 </template>
+
+<style scoped>
+.logo {
+  width: 36px;
+  height: 36px;
+}
+</style>
