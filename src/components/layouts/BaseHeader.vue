@@ -1,8 +1,12 @@
 <script lang="ts" setup>
-import { Search } from '@element-plus/icons-vue';
-import { ref } from 'vue';
-import { toggleDark } from '~/composables';
-import { useRouter, useRoute } from 'vue-router'
+import {
+  DataAnalysis, Film, Menu,
+  Search, Setting, User, Warning
+} from '@element-plus/icons-vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { toggleDark } from '~/composables'
+import 'element-plus/theme-chalk/display.css'
 
 interface SearchItem {
   value: any
@@ -11,7 +15,10 @@ interface SearchItem {
 var searchText = ref('')
 const activeIndex = ref('1')
 const handleMenuSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+  // console.log(`key=${key},keyPath=${keyPath}`)
+  if (key && key.startsWith('/')) {
+    router.push({ path: key })
+  }
 }
 const querySearch = (queryString: string, cb: any) => {
   const results: SearchItem[] = [];
@@ -46,6 +53,43 @@ const submit = (e: KeyboardEvent) => router.push({
         <i inline-flex i="dark:ep-moon ep-sunny" />
       </button>
     </el-menu-item>
+    <el-sub-menu index="3" class="hidden-sm-and-up">
+      <template #title>
+        <el-icon>
+          <Menu />
+        </el-icon>
+      </template>
+      <el-menu-item index="/video/list">
+        <el-icon>
+          <film />
+        </el-icon>
+        <span>影视</span>
+      </el-menu-item>
+      <el-menu-item index="/statics">
+        <el-icon>
+          <data-analysis />
+        </el-icon>
+        <span>统计</span>
+      </el-menu-item>
+      <el-menu-item index="/setting">
+        <el-icon>
+          <setting />
+        </el-icon>
+        <span>设置</span>
+      </el-menu-item>
+      <el-menu-item index="/user">
+        <el-icon>
+          <user />
+        </el-icon>
+        <span>用户</span>
+      </el-menu-item>
+      <el-menu-item index="/about">
+        <el-icon>
+          <warning />
+        </el-icon>
+        <span>关于</span>
+      </el-menu-item>
+    </el-sub-menu>
   </el-menu>
 </template>
 

@@ -10,6 +10,7 @@ const router = createRouter({
 
     // 影视
     {
+      alias: '/video',
       path: '/video/list',
       name: 'videoList',
       component: () => import('~/components/views/video/List.vue')

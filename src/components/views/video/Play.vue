@@ -17,7 +17,7 @@ videoStore.fetchById(parseInt(props.id))
 // 响应屏幕宽度
 const clientWidth = ref(document.body.clientWidth);
 const playerWidth = computed(() => clientWidth.value - 120)
-const playerHeight = computed(() => Math.floor(clientWidth.value / 1.8))
+const playerHeight = computed(() => Math.floor(playerWidth.value / 1.8))
 const playerWidthPx = computed(() => playerWidth.value.toString() + 'px')
 const playerHeightPx = computed(() => playerHeight.value.toString() + 'px')
 

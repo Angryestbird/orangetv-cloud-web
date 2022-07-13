@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import 'element-plus/theme-chalk/display.css'
 </script>
+
 <template>
   <el-config-provider namespace="ep">
     <BaseHeader />
     <el-container>
-      <el-aside width="64px">
+      <el-aside width="64px" class="hidden-xs-only">
         <BaseSide />
       </el-aside>
-      <el-main>
+      <el-main style="height: calc(100vh - 60px);">
         <router-view v-slot="{ Component, route }">
           <transition name="slide-fade">
             <component :is="Component" :key="route.path" />
@@ -38,5 +40,4 @@ import { RouterView } from 'vue-router'
   transform: translateX(20px);
   opacity: 0;
 }
-
 </style>

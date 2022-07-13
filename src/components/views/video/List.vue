@@ -36,10 +36,10 @@ const playVideo = (id: number) => router.push({
 <template>
   <div>
     <el-page-header :icon="Film" content="影视" title=" " />
-    <el-row v-for="rowNum in lineNum(cntPerRow)" style="margin-top: 12px;">
+    <el-row v-for="rowNum in lineNum(cntPerRow)" :gutter="6">
       <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
-        <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :xs="10" :span="4"
-          :offset="index > 0 ? (isMobile ? 2 : 1) : 0">
+        <el-col v-if="(rowNum - 1) * cntPerRow + o <= totalInPage" :span="4" :offset="index > 0 ? 1 : 0"
+          :xs="{ span: 12, offset: 0 }">
           <el-card :body-style="{ padding: '0px' }" shadow="hover"
             @click="() => playVideo(dataList[(rowNum - 1) * cntPerRow + index].id)">
             <el-image :src="dataList[(rowNum - 1) * cntPerRow + index].coverUrl" class="image" fit="scale-down" />
@@ -48,7 +48,7 @@ const playVideo = (id: number) => router.push({
                 <span class="title">{{ dataList[(rowNum - 1) * cntPerRow + index].title }}</span>
                 <div class="bottom">
                   <time class="time">{{ dataList[(rowNum - 1) * cntPerRow + index]
-                      .uploadTime.toLocaleTimeString()
+                      .uploadTime.toLocaleDateString()
                   }}</time>
                 </div>
               </div>
@@ -67,6 +67,10 @@ const playVideo = (id: number) => router.push({
 </template>
 
 <style scoped>
+.ep-page-header {
+  margin-bottom: 12px;
+}
+
 .time {
   font-size: 12px;
   color: #999;
