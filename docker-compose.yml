@@ -3,6 +3,7 @@ services:
   orangetv-cloud-web:
     ports:
       - "8080:80"
+    hostname: orangetv-cloud-web
     volumes:
       - /d/Video/videocache:/usr/share/nginx/video:ro
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
