@@ -25,7 +25,24 @@ onMounted(async () => {
 // 初始化store
 const videoStore = useVideoStore()
 const { dataList, totalInPage, lineNum } = storeToRefs(videoStore)
-onMounted(() => videoStore.fetch())
+onMounted(() => videoStore.fetchPage())
+
+function padWithZero(num: number, targetLength: number) {
+  return String(num).padStart(targetLength, '0')
+}
+
+const mapLenth = function (length: number) {
+  var seconds = Math.floor(length / 1000000);
+  var minutes = Math.floor(seconds / 60);
+  var hours = Math.floor(minutes / 60);
+  return `${padWithZero(hours, 2)}:`
+    + `${padWithZero(minutes % 60, 2)}:`
+    + `${padWithZero(seconds % 60, 2)}`
+}
+
+const onCurrentChange = async (page: number) => {
+  await videoStore.fetchPage(page)
+}
 
 // 播放回调
 const router = useRouter()
@@ -49,9 +66,7 @@ const playVideo = (id: number) => router.push({
               <div style="padding: 5px">
                 <span class="title">{{ dataList[(rowNum - 1) * cntPerRow + index].title }}</span>
                 <div class="bottom">
-                  <time class="time">{{ dataList[(rowNum - 1) * cntPerRow + index]
-                      .uploadTime.toLocaleDateString()
-                  }}</time>
+                  <time class="time">{{ mapLenth(dataList[(rowNum - 1) * cntPerRow + index].length) }}</time>
                 </div>
               </div>
               <div style="margin: 3px;">
@@ -63,7 +78,7 @@ const playVideo = (id: number) => router.push({
       </template>
     </el-row>
     <div style="display: flex;justify-content: center;">
-      <el-pagination layout="prev, pager, next" :total="videoStore.totalCnt" />
+      <el-pagination layout="prev, pager, next" :total="videoStore.totalCnt" @current-change="onCurrentChange" />
     </div>
   </div>
 </template>

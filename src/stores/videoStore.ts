@@ -7,14 +7,33 @@ export interface Video {
     title: string
     /** 视频类型 */
     type?: string
-    /** 上传时间 */
-    uploadTime: Date
+    /** 视频长度(微秒) */
+    length: number
     /** 上传用户ID */
     uploadUserId?: number
     /** 视频封面URL*/
     coverUrl: string
     /** 视频URL */
     url: string
+}
+
+type VideoModel = {
+    id: number
+    name: string
+    title: string
+    coverUrl: string
+    length?: number
+    url: string
+}
+
+type VideoNullable = Video | undefined
+
+const mapToVO = (model: VideoModel) => <Video>{
+    id: model.id,
+    title: model.title,
+    coverUrl: model.coverUrl,
+    length: model.length,
+    url: model.url
 }
 
 export const useVideoStore = defineStore('videoStore', {
@@ -24,7 +43,7 @@ export const useVideoStore = defineStore('videoStore', {
             currentPage: 1,
             searchText: '',
             dataList: <Video[]>[],
-            videoInfo: <Video | undefined>undefined
+            videoInfo: <VideoNullable>undefined
         }
     },
     getters: {
@@ -35,64 +54,36 @@ export const useVideoStore = defineStore('videoStore', {
     actions: {
         async fetchById(id: number) {
 
-            var video = await this.getById(id) || {
-                id: 1,
-                title: 'video1',
-                type: 'm3u8',
-                uploadTime: new Date(),
-                coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            var video = this.getById(id);
+            if (!video) {
+                var rawResponse = await fetch(`/api/VIDEO-STORE/video/${id}`)
+                var response: Response<VideoModel> = await rawResponse.json()
+                video = mapToVO(response.body)
             }
             this.videoInfo = video;
         },
-        async fetch() {
-            this.dataList = [
-                {
-                    id: 1,
-                    title: 'video1',
-                    type: 'm3u8',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
-                },
-                {
-                    id: 2,
-                    title: 'video2',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/IronMan.mp4'
-                },
-                {
-                    id: 3,
-                    title: 'video3',
-                    type: 'm3u8',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://logos-channel.scaleengine.net/logos-channel/live/biblescreen-ad-free/playlist.m3u8'
-                },
-                {
-                    id: 4,
-                    title: 'video4',
-                    type: 'm3u8',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://logos-channel.scaleengine.net/logos-channel/live/biblescreen-ad-free/playlist.m3u8'
-                },
-                {
-                    id: 5,
-                    title: 'video5',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/IronMan.mp4'
-                },
-                {
-                    id: 6,
-                    title: 'video6',
-                    uploadTime: new Date(),
-                    coverUrl: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-                    url: 'https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/IronMan.mp4'
-                }
-            ]
+        async fetchPage(page?: number, search?: string) {
+            var url = `/api/VIDEO-STORE/video/query/page?current=${page ? page : 1}`;
+            if (search && search.trim()) {
+                url += `&search=${encodeURIComponent(search)}`
+            }
+            var rawResponse = await fetch(url)
+            var response: Response<Pageable<VideoModel>> = await rawResponse.json()
+            console.log(response)
+            this.dataList = response.body.data.map(videoModel => mapToVO(videoModel))
+            this.totalCnt = response.body.total
         }
     }
 })
+
+interface Response<T> {
+    body: T
+    code: number
+    msg: string
+}
+
+interface Pageable<T> {
+    total: number
+    current: number
+    data: T[]
+}
