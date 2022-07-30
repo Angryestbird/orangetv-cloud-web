@@ -62,4 +62,19 @@ export default defineConfig({
       ]
     }),
   ],
+  server: {
+    port: 8080,
+    host: process.env.USERDOMAIN,
+    proxy: {
+      '/api/': {
+        target: `http://${process.env.USERDOMAIN}:9000`,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/login/oauth2/code/': {
+        target: `http://${process.env.USERDOMAIN}:9000`,
+        changeOrigin: true,
+      }
+    }
+  }
 })

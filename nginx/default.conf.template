@@ -1,7 +1,13 @@
 server {
     listen       80;
-    listen  [::]:80;
     server_name  localhost;
+    return       301 http://${OUTER_HOSTNAME}:${OUTER_HOSTPORT}$request_uri;
+}
+
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  ${OUTER_HOSTNAME};
 
     #access_log  /var/log/nginx/host.access.log  main;
 
@@ -20,8 +26,23 @@ server {
         root /usr/share/nginx;
     }
 
+    # 服务API接口
     location /api/ {
-        proxy_pass http://192.168.1.186:9000/;
+        # strip prefix 'api'
+        proxy_pass http://host.docker.internal:${GATEWAY_PORT}/;
+
+        # not strip prefix 'api'
+        # proxy_pass http://host.docker.internal:${GATEWAY_PORT};
+    }
+
+    # 重定向到认证服务的接口
+    # location /oauth2/authorization/ {
+        # proxy_pass http://host.docker.internal:${GATEWAY_PORT};
+    # }
+
+    # oauth2认证码重定向接口
+    location /login/oauth2/code/ {
+        proxy_pass http://host.docker.internal:${GATEWAY_PORT};
     }
 
     #error_page  404              /404.html;

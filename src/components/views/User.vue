@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { User } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 
 const formRef = ref<FormInstance>()
 var loginVO = reactive({
@@ -21,13 +21,22 @@ const rules = reactive<FormRules>({
 
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    await formEl.validate((valid, fields) => {
-        if (valid) {
-            console.log('submit!')
-        } else {
-            console.log('error submit!', fields)
+    var validateResult = await formEl.validate((valid, fields) => {
+        if (!valid) {
+            console.log('表单格式有误！', fields)
         }
     })
+    if (validateResult) {
+        var form = <HTMLFormElement>formEl.$el
+        form.action = "/api/AUTH-SERVER/login"
+        form.method = "post"
+        form.submit()
+    }
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+    loginVO.username = ''
+    loginVO.password = ''
 }
 </script>
 
@@ -40,17 +49,18 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     <div style="display:flex;justify-content: center;align-items:center;">
                         <img class="logo" src="/favicon.svg" /><span style="font-size: large;">橘子云TV</span>
                     </div>
-                    <div style="display:flex;justify-content: center;">
+                    <div style="display:flex;justify-content: center;padding-top: 36px;">
                         <el-form :model="loginVO" label-width="60px" :rules="rules" ref="formRef"
                             style="max-width: 350px;">
                             <el-form-item label="用户" prop="username">
-                                <el-input v-model="loginVO.username"></el-input>
+                                <el-input v-model="loginVO.username" name="username"></el-input>
                             </el-form-item>
                             <el-form-item label="密码" prop="password">
-                                <el-input v-model="loginVO.password" type="password"></el-input>
+                                <el-input v-model="loginVO.password" name="password" type="password"></el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button @click="submitForm(formRef)">登录</el-button>
+                                <el-button type="warning" @click="submitForm(formRef)">登录</el-button>
+                                <el-button @click="resetForm(formRef)">重置</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
