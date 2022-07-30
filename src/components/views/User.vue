@@ -1,13 +1,35 @@
 <script setup lang="ts">
 import { User } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { VideoPlay } from '@element-plus/icons-vue'
 import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const formRef = ref<FormInstance>()
-var loginVO = reactive({
+const loginVO = reactive({
     username: '',
-    password: ''
+    password: '',
+    loggedIn: false,
+    userInfo: <{ sub: string }>{}
 })
+
+const router = useRouter()
+const formRef = ref<FormInstance>()
+
+const getUserInfo = async () => {
+    console.log('getUserInfo')
+    try {
+        var response = await fetch(
+            '/api/AUTH-SERVER/userinfo', {
+            redirect: 'error'
+        })
+        loginVO.userInfo = await response.json()
+        loginVO.loggedIn = true
+    } catch (error) {
+        loginVO.loggedIn = false
+    }
+}
+onMounted(getUserInfo)
+
 const rules = reactive<FormRules>({
     username: [
         { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -44,14 +66,14 @@ const resetForm = (formEl: FormInstance | undefined) => {
     <div>
         <el-page-header :icon="User" content="用户" title=" " />
         <el-row :gutter="20">
-            <el-col :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
+            <el-col v-if="!loginVO.loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
                 <el-card style="margin-top: 12px;">
                     <div style="display:flex;justify-content: center;align-items:center;">
                         <img class="logo" src="/favicon.svg" /><span style="font-size: large;">橘子云TV</span>
                     </div>
                     <div style="display:flex;justify-content: center;padding-top: 36px;">
                         <el-form :model="loginVO" label-width="60px" :rules="rules" ref="formRef"
-                            style="max-width: 350px;">
+                            style="max-width: 350px;" @keyup.enter="submitForm(formRef)">
                             <el-form-item label="用户" prop="username">
                                 <el-input v-model="loginVO.username" name="username"></el-input>
                             </el-form-item>
@@ -66,11 +88,31 @@ const resetForm = (formEl: FormInstance | undefined) => {
                     </div>
                 </el-card>
             </el-col>
+            <el-col v-if="loginVO.loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
+                <el-card style="margin-top: 12px;">
+                    <div style="display:flex;justify-content: center;align-items:center;">
+                        <span style="font-size: large;">欢迎您，{{ loginVO.userInfo.sub }}</span>
+                    </div>
+                    <div style="display:flex;justify-content: center;padding-top: 36px;">
+                        <img class="logo big" src="/favicon.svg" />
+                    </div>
+                    <div style="display:flex;justify-content: center;padding-top: 36px;">
+                        <el-button :icon="VideoPlay" @click="router.push('/video/list')">
+                            前往观看影视
+                        </el-button>
+                    </div>
+                </el-card>
+            </el-col>
         </el-row>
     </div>
 </template>
 
 <style>
+.logo.big {
+    width: 180px;
+    height: 180px;
+}
+
 .logo {
     width: 36px;
     height: 36px;
