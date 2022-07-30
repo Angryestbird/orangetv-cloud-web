@@ -1,34 +1,25 @@
 <script setup lang="ts">
 import { User } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { useLoginStore } from '~/stores/loginStore.js'
 import { VideoPlay } from '@element-plus/icons-vue'
+import { useRouter, useRoute } from 'vue-router'
 import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 const loginVO = reactive({
     username: '',
-    password: '',
-    loggedIn: false,
-    userInfo: <{ sub: string }>{}
+    password: ''
 })
 
+const route = useRoute()
 const router = useRouter()
 const formRef = ref<FormInstance>()
+const loginStore = useLoginStore()
+onMounted(loginStore.queryLogin)
 
-const getUserInfo = async () => {
-    console.log('getUserInfo')
-    try {
-        var response = await fetch(
-            '/api/AUTH-SERVER/userinfo', {
-            redirect: 'error'
-        })
-        loginVO.userInfo = await response.json()
-        loginVO.loggedIn = true
-    } catch (error) {
-        loginVO.loggedIn = false
-    }
-}
-onMounted(getUserInfo)
+const showError = ref('error' in route.query)
+const { loggedIn, userInfo } = storeToRefs(loginStore)
 
 const rules = reactive<FormRules>({
     username: [
@@ -66,7 +57,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
     <div>
         <el-page-header :icon="User" content="用户" title=" " />
         <el-row :gutter="20">
-            <el-col v-if="!loginVO.loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
+            <el-col v-if="!loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
                 <el-card style="margin-top: 12px;">
                     <div style="display:flex;justify-content: center;align-items:center;">
                         <img class="logo" src="/favicon.svg" /><span style="font-size: large;">橘子云TV</span>
@@ -87,11 +78,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
                         </el-form>
                     </div>
                 </el-card>
+                <el-alert v-if="showError" title="用户名或密码错误" type="warning" center show-icon />
             </el-col>
-            <el-col v-if="loginVO.loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
+            <el-col v-if="loggedIn" :span="12" :offset="6" :xs="{ span: 24, offset: 0 }">
                 <el-card style="margin-top: 12px;">
                     <div style="display:flex;justify-content: center;align-items:center;">
-                        <span style="font-size: large;">欢迎您，{{ loginVO.userInfo.sub }}</span>
+                        <span style="font-size: large;">欢迎您，{{ userInfo.sub }}</span>
                     </div>
                     <div style="display:flex;justify-content: center;padding-top: 36px;">
                         <img class="logo big" src="/favicon.svg" />

@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useVideoStore } from '~/stores/videoStore';
 import { VideoPlay } from '@element-plus/icons-vue';
 import { Film } from '@element-plus/icons-vue'
+import requireLogin from '~/util/login.js';
 import { computed } from '@vue/reactivity';
 import { storeToRefs } from 'pinia';
 
@@ -16,8 +17,9 @@ const props = defineProps<{
 const clientWidth = ref(document.body.clientWidth);
 const isMobile = computed(() => clientWidth.value < 768)
 const cntPerRow = computed(() => isMobile.value ? 2 : 5)
-onMounted(() => {
+onMounted(async () => {
   window.onresize = () => clientWidth.value = document.body.clientWidth
+  await requireLogin()
 })
 
 // 初始化store
