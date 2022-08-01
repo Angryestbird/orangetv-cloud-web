@@ -1,23 +1,26 @@
 import { defineStore } from "pinia";
+import { VideoModel } from "./videoStore";
+import { Response } from "./videoStore";
 
-export interface Playback {
+export interface PlayTopItem {
     title: string,
-    playbackAmount: number,
+    play?: number,
 }
 
 export const useStaticsStore = defineStore('staticsStore', {
     state: () => {
-        return { playbackRank: <Playback[]>[] }
+        return { playTop: <PlayTopItem[]>[] }
     },
     actions: {
         async fetch() {
-            setTimeout(() => this.playbackRank = [
-                { title: "变形金刚1", playbackAmount: 50 },
-                { title: "变形金刚2", playbackAmount: 40 },
-                { title: "变形金刚3", playbackAmount: 30 },
-                { title: "变形金刚4", playbackAmount: 20 },
-                { title: "变形金刚5", playbackAmount: 10 }
-            ], 3000)
+            var rawResponse = await fetch(`/api/VIDEO-STORE/video/play/top/10`)
+            var response: Response<VideoModel[]> = await rawResponse.json()
+            this.playTop = response.body.map(model => mapToVO(model))
         }
     }
 })
+
+const mapToVO = (model: VideoModel) => ({
+    title: model.title,
+    play: model.play
+}) 

@@ -74,6 +74,10 @@ export default defineConfig({
       '/login/oauth2/code/': {
         target: `http://${process.env.USERDOMAIN}:9000`,
         changeOrigin: true,
+      },
+      '/video-repo/': {
+        target: `http://${process.env.USERDOMAIN}:9000`,
+        changeOrigin: true,
       }
     }
   }

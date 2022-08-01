@@ -17,12 +17,12 @@ export interface Video {
     url: string
 }
 
-type VideoModel = {
+export type VideoModel = {
     id: number
-    name: string
     title: string
     coverUrl: string
     length?: number
+    play?: number
     url: string
 }
 
@@ -62,27 +62,26 @@ export const useVideoStore = defineStore('videoStore', {
             }
             this.videoInfo = video;
         },
-        async fetchPage(page?: number, search?: string) {
+        async fetchPage(page?: number, searchText?: string) {
             var url = `/api/VIDEO-STORE/video/query/page?current=${page ? page : 1}`;
-            if (search && search.trim()) {
-                url += `&search=${encodeURIComponent(search)}`
+            if (searchText && searchText.trim()) {
+                url += `&search=${encodeURIComponent(searchText.trim())}`
             }
             var rawResponse = await fetch(url)
             var response: Response<Pageable<VideoModel>> = await rawResponse.json()
-            console.log(response)
             this.dataList = response.body.data.map(videoModel => mapToVO(videoModel))
             this.totalCnt = response.body.total
         }
     }
 })
 
-interface Response<T> {
+export interface Response<T> {
     body: T
     code: number
     msg: string
 }
 
-interface Pageable<T> {
+export interface Pageable<T> {
     total: number
     current: number
     data: T[]

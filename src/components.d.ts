@@ -28,6 +28,8 @@ declare module '@vue/runtime-core' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     List: typeof import('./components/views/video/List.vue')['default']
     Play: typeof import('./components/views/video/Play.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -13,6 +13,7 @@ const router = createRouter({
       alias: '/video',
       path: '/video/list',
       name: 'videoList',
+      props: route => ({ search: route.query.search }),
       component: () => import('~/components/views/video/List.vue')
     },
     {

@@ -4,7 +4,7 @@ async function requireLogin() {
     var loginStore = useLoginStore()
     var loggedin = await loginStore.queryLogin()
     if (loggedin) {
-        return
+        return loginStore.userInfo
     }
     var loginPath = '/api/orange/cloud/tv/login'
     var protocol = window.location.protocol;

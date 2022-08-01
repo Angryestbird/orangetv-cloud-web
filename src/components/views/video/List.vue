@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUpdated, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useVideoStore } from '~/stores/videoStore';
 import { VideoPlay } from '@element-plus/icons-vue';
@@ -10,7 +10,7 @@ import { storeToRefs } from 'pinia';
 
 // 定义搜索文本为入参
 const props = defineProps<{
-  searchText?: number
+  search?: string
 }>()
 
 // 初始化设备相关参数
@@ -22,10 +22,17 @@ onMounted(async () => {
   await requireLogin()
 })
 
-// 初始化store
+// 分页查询
+const currentPage = ref(0);
+const onCurrentChange = async (page: number) => {
+  currentPage.value = page
+}
+
+// 初始化store，属性更新也要重新加载
 const videoStore = useVideoStore()
 const { dataList, totalInPage, lineNum } = storeToRefs(videoStore)
-onMounted(() => videoStore.fetchPage())
+onUpdated(() => videoStore.fetchPage(currentPage.value, props.search)) // 
+onMounted(() => videoStore.fetchPage(currentPage.value, props.search))
 
 function padWithZero(num: number, targetLength: number) {
   return String(num).padStart(targetLength, '0')
@@ -40,8 +47,9 @@ const mapLenth = function (length: number) {
     + `${padWithZero(seconds % 60, 2)}`
 }
 
-const onCurrentChange = async (page: number) => {
-  await videoStore.fetchPage(page)
+const mapTitle = function (title: string) {
+  if (title.length < 36) return title
+  return `${title.substring(0, 36)}...`
 }
 
 // 播放回调
@@ -64,7 +72,9 @@ const playVideo = (id: number) => router.push({
             <el-image :src="dataList[(rowNum - 1) * cntPerRow + index].coverUrl" class="image" fit="scale-down" />
             <div style="display: flex;justify-content: space-between;">
               <div style="padding: 5px">
-                <span class="title">{{ dataList[(rowNum - 1) * cntPerRow + index].title }}</span>
+                <el-tooltip :content="dataList[(rowNum - 1) * cntPerRow + index].title">
+                  <span class="title">{{ mapTitle(dataList[(rowNum - 1) * cntPerRow + index].title) }}</span>
+                </el-tooltip>
                 <div class="bottom">
                   <time class="time">{{ mapLenth(dataList[(rowNum - 1) * cntPerRow + index].length) }}</time>
                 </div>

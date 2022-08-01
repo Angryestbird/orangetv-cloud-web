@@ -17,13 +17,8 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-    location /videoRepo/ {
-        mp4;
-        mp4_buffer_size        1m;
-        mp4_max_buffer_size    5m;
-        # mp4_limit_rate       on;
-        # mp4_limit_rate_after 30s;
-        root /usr/share/nginx;
+    location /video-repo/ {
+        proxy_pass http://host.docker.internal:${GATEWAY_PORT};
     }
 
     # 服务API接口
@@ -36,9 +31,9 @@ server {
     }
 
     # 重定向到认证服务的接口
-    # location /oauth2/authorization/ {
-        # proxy_pass http://host.docker.internal:${GATEWAY_PORT};
-    # }
+    location /oauth2/authorization/ {
+        proxy_pass http://host.docker.internal:${GATEWAY_PORT};
+    }
 
     # oauth2认证码重定向接口
     location /login/oauth2/code/ {

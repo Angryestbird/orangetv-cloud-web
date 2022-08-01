@@ -1,15 +1,14 @@
-version: "3.9"  # optional since v1.27.0
+version: "3.9" # optional since v1.27.0
 services:
   orangetv-cloud-web:
+    image: nginx
     ports:
       - "$FRONT_PORT:80"
     hostname: orangetv-cloud-web
     volumes:
-      - /d/Video/videocache:/usr/share/nginx/video:ro
       - ./nginx:/etc/nginx/templates:ro
       - ./dist:/usr/share/nginx/html:ro
     environment:
       - OUTER_HOSTNAME=$USERDOMAIN
       - OUTER_HOSTPORT=$FRONT_PORT
       - GATEWAY_PORT=$GATEWAY_PORT
-    image: nginx

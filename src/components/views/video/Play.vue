@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useVideoStore, Video } from '~/stores/videoStore';
 import { ArrowLeft } from '@element-plus/icons-vue';
 import { videoPlay } from 'vue3-video-play';
+import requireLogin from '~/util/login.js';
 import PlayerOption from '~/util/option';
 import 'vue3-video-play/dist/style.css';
 
@@ -16,14 +17,16 @@ videoStore.fetchById(parseInt(props.id))
 
 // 响应屏幕宽度
 const clientWidth = ref(document.body.clientWidth);
-const playerWidth = computed(() => clientWidth.value - 120)
+const isMobile = computed(() => clientWidth.value < 768)
+
+const playerWidth = computed(() => clientWidth.value - (isMobile.value ? 60 : 360))
 const playerHeight = computed(() => Math.floor(playerWidth.value / 1.8))
+
 const playerWidthPx = computed(() => playerWidth.value.toString() + 'px')
 const playerHeightPx = computed(() => playerHeight.value.toString() + 'px')
 
-onMounted(() => {
-    window.onresize = () => clientWidth.value = document.body.clientWidth
-})
+onMounted(async () => (await requireLogin()) && fetch(`/api/VIDEO-STORE/video/play/${props.id}`))
+onMounted(() => window.onresize = () => clientWidth.value = document.body.clientWidth)
 
 // 设置播放器属性
 const options = computed(() => {

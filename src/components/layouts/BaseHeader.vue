@@ -3,10 +3,13 @@ import {
   DataAnalysis, Film, Menu,
   Search, Setting, User, Warning
 } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import 'element-plus/theme-chalk/display.css'
 import { useRouter } from 'vue-router'
 import { toggleDark } from '~/composables'
-import 'element-plus/theme-chalk/display.css'
+import {
+  Pageable, Response, VideoModel
+} from '~/stores/videoStore'
+import { ref } from 'vue'
 
 interface SearchItem {
   value: any
@@ -20,32 +23,40 @@ const handleMenuSelect = (key: string, keyPath: string[]) => {
     router.push({ path: key })
   }
 }
-const querySearch = (queryString: string, cb: any) => {
-  const results: SearchItem[] = [];
-  // call callback function to return suggestions
-  cb(results)
+const fetchSuggestions = (queryString: string, cb: any) => {
+
+  var url = '/api/VIDEO-STORE/video/query/page?current=1';
+  if (queryString && queryString.trim()) {
+    url += `&search=${encodeURIComponent(queryString)}`
+    doFetchSuggestions(url).then(results => cb(results))
+  }
+}
+
+const doFetchSuggestions = async (url: string) => {
+  var rawResponse = await fetch(url)
+  var response: Response<Pageable<VideoModel>> = await rawResponse.json()
+  return response.body.data.map(model => ({ value: model.title }))
 }
 
 const router = useRouter()
 const handleSelect = (item: SearchItem) => {
-  searchText = item.value
+  searchText.value = item.value
 }
 const submit = (e: KeyboardEvent) => router.push({
-  name: 'videoList',
-  query: {
-    search: searchText.value
-  }
+  query: { search: searchText.value },
+  name: 'videoList'
 })
 </script>
 
 <template>
   <el-menu class="el-menu-demo" mode="horizontal" :ellipsis="false" :default-active="activeIndex"
     @select="handleMenuSelect">
-    <el-menu-item index="1"><img class="logo" src="/favicon.svg" /><span style="font-size:large;">橘子云TV</span>
+    <el-menu-item index="1">
+      <img class="logo" src="/favicon.svg" /> <span class="hidden-xs-only" style="font-size:large;">橘子云TV</span>
     </el-menu-item>
     <div class="flex-grow"></div>
     <el-autocomplete class="w-50 m-2" size="large" placeholder="搜索资源" :suffix-icon="Search" v-model="searchText"
-      :trigger-on-focus="false" :fetch-suggestions="querySearch" @select="handleSelect" clearable
+      :trigger-on-focus="false" :fetch-suggestions="fetchSuggestions" @select="handleSelect" clearable
       @keyup.enter="submit" />
     <div class="flex-grow"></div>
     <el-menu-item index="2" h="full" @click="toggleDark()">
