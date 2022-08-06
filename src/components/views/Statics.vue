@@ -22,9 +22,11 @@ import { } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { LabelLayout, UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
+import { YAXisOption } from 'echarts/types/dist/shared'
 import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, ref, watch, WatchStopHandle } from 'vue'
 import { useStaticsStore } from '~/stores/staticsStore'
+import requireLogin from '~/util/login'
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = echarts.ComposeOption<
@@ -78,8 +80,15 @@ const option: ECOption = {
             }
         }
     ],
-    xAxis: {},
-    yAxis: { type: 'category' },
+    xAxis: { name: '播放量' },
+    yAxis: <YAXisOption>{
+        name: "片名",
+        type: 'category',
+        axisLabel: {
+            width: 120,
+            overflow: 'truncate',
+        }
+    },
     series: [
         {
             type: 'bar',
@@ -116,12 +125,12 @@ staticsStore.fetch()
 </script>
 
 <template>
-    <div>
+    <pend-login :try-login="requireLogin">
         <el-page-header :icon="DataAnalysis" content="统计" title=" " />
         <el-card style="margin-top: 12px;">
             <div style="display: flex;justify-content:center;">
                 <div style="width: 100%;height: 480px;" ref="chart"></div>
             </div>
         </el-card>
-    </div>
+    </pend-login>
 </template>

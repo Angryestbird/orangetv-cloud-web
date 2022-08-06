@@ -57,10 +57,10 @@ const goBack = () => {
 </script>
 
 <template>
-    <div>
+    <pend-login :try-login="requireLogin">
         <el-page-header :icon="ArrowLeft" title="返回" :content="videoInfo?.title" @back="goBack" />
         <video-play ref="video" style="{ display: 'inline-block': width: 100% }" v-bind="options" />
-    </div>
+    </pend-login>
 </template>
 
 <style scoped>

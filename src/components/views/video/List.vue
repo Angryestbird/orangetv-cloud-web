@@ -17,10 +17,7 @@ const props = defineProps<{
 const clientWidth = ref(document.body.clientWidth);
 const isMobile = computed(() => clientWidth.value < 768)
 const cntPerRow = computed(() => isMobile.value ? 2 : 5)
-onMounted(async () => {
-  window.onresize = () => clientWidth.value = document.body.clientWidth
-  await requireLogin()
-})
+onMounted(() => window.onresize = () => clientWidth.value = document.body.clientWidth)
 
 // 分页查询
 const currentPage = ref(0);
@@ -61,7 +58,7 @@ const playVideo = (id: number) => router.push({
 </script>
 
 <template>
-  <div>
+  <pend-login :try-login="requireLogin">
     <el-page-header :icon="Film" content="影视" title=" " />
     <el-row v-for="rowNum in lineNum(cntPerRow)" :gutter="6">
       <template v-for="(o, index) in cntPerRow" :key="(rowNum - 1) * cntPerRow + o">
@@ -90,7 +87,7 @@ const playVideo = (id: number) => router.push({
     <div style="display: flex;justify-content: center;">
       <el-pagination layout="prev, pager, next" :total="videoStore.totalCnt" @current-change="onCurrentChange" />
     </div>
-  </div>
+  </pend-login>
 </template>
 
 <style scoped>

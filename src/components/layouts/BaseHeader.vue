@@ -51,7 +51,7 @@ const submit = (e: KeyboardEvent) => router.push({
 <template>
   <el-menu class="el-menu-demo" mode="horizontal" :ellipsis="false" :default-active="activeIndex"
     @select="handleMenuSelect">
-    <el-menu-item index="1">
+    <el-menu-item index="1" @click="router.push({ path: '/video' })">
       <img class="logo" src="/favicon.svg" /> <span class="hidden-xs-only" style="font-size:large;">橘子云TV</span>
     </el-menu-item>
     <div class="flex-grow"></div>

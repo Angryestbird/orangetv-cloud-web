@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import 'element-plus/theme-chalk/display.css'
 import { User } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useLoginStore } from '~/stores/loginStore.js'
@@ -71,7 +72,11 @@ const resetForm = (formEl: FormInstance | undefined) => {
                             <el-form-item label="密码" prop="password">
                                 <el-input v-model="loginVO.password" name="password" type="password"></el-input>
                             </el-form-item>
-                            <el-form-item>
+                            <el-form-item class="hidden-sm-and-up">
+                                <el-button size="large" type="warning" @click="submitForm(formRef)">登录</el-button>
+                                <el-button size="large" @click="resetForm(formRef)">重置</el-button>
+                            </el-form-item>
+                            <el-form-item class="hidden-xs-only">
                                 <el-button type="warning" @click="submitForm(formRef)">登录</el-button>
                                 <el-button @click="resetForm(formRef)">重置</el-button>
                             </el-form-item>

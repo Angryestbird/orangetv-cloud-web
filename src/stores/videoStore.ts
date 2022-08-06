@@ -67,7 +67,7 @@ export const useVideoStore = defineStore('videoStore', {
             if (searchText && searchText.trim()) {
                 url += `&search=${encodeURIComponent(searchText.trim())}`
             }
-            var rawResponse = await fetch(url)
+            var rawResponse = await fetch(url, { redirect: 'manual' })
             var response: Response<Pageable<VideoModel>> = await rawResponse.json()
             this.dataList = response.body.data.map(videoModel => mapToVO(videoModel))
             this.totalCnt = response.body.total
